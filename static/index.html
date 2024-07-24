@@ -28,15 +28,13 @@
                const room = data.results.room;
                const comments = data.results.comments;
 
-               // Set room details with validation
-               if (room && room.image_url) {
+                  if (room && room.image_url) {
                   document.getElementById("room-image").src = room.image_url;
                }
                if (room && room.name) {
                   document.getElementById("room-name").textContent = room.name;
                }
 
-               // Display messages
                const chatContainer = document.getElementById("chat-container");
                if (comments && Array.isArray(comments)) {
                   comments.forEach((comment) => {
