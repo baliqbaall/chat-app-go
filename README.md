@@ -19,7 +19,7 @@ Aplikasi chat sederhana yang dibangun menggunakan Go untuk backend dan HTML/CSS/
 
 1. **Clone Repository**:
    ```bash
-   git clone https://github.com/username/chat-app.git
+   git clone https://github.com/baliqbaall/chat-app.git
    cd chat-app
    ```
 
