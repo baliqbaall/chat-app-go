@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Chat App</title>
+   <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+   <div id="chat-app">
+      <div id="chat-header" class="chat-header">
+         <img id="room-image" src="" alt="Room Image" class="room-image">
+         <h1 id="room-name"></h1>
+      </div>
+      <div id="chat-container" class="chat-container"></div>
+      <div id="input-container" class="input-container">
+         <input type="text" id="message-input" placeholder="Type a message...">
+         <button id="send-button">Send</button>
+      </div>
+   </div>
+   <script>
+      document.addEventListener("DOMContentLoaded", function () {
+         fetch("/api/messages")
+            .then((response) => response.json())
+            .then((data) => {
+               const room = data.results.room;
+               const comments = data.results.comments;
+
+               // Set room details with validation
+               if (room && room.image_url) {
+                  document.getElementById("room-image").src = room.image_url;
+               }
+               if (room && room.name) {
+                  document.getElementById("room-name").textContent = room.name;
+               }
+
+               // Display messages
+               const chatContainer = document.getElementById("chat-container");
+               if (comments && Array.isArray(comments)) {
+                  comments.forEach((comment) => {
+                     const messageElement = document.createElement("div");
+                     messageElement.classList.add("chat-message");
+
+                     if (comment.sender === "customer@mail.com") {
+                        messageElement.classList.add("user");
+                     } else {
+                        messageElement.classList.add("other");
+                     }
+
+                     messageElement.innerHTML = `<strong>${comment.sender}:</strong> `;
+
+                     if (comment.type === "text") {
+                        messageElement.innerHTML += comment.message;
+                     } else if (comment.type === "image") {
+                        messageElement.innerHTML += `<br><img src="${comment.image_url}" alt="Image" class="chat-image">`;
+                     } else if (comment.type === "video") {
+                        messageElement.innerHTML += `<br><video controls class="chat-video"><source src="${comment.video_url}" type="video/mp4">Your browser does not support the video tag.</video>`;
+                     } else if (comment.type === "pdf") {
+                        messageElement.innerHTML += `<br><a href="${comment.pdf_url}" target="_blank" class="chat-pdf">View PDF</a>`;
+                     }
+
+                     chatContainer.appendChild(messageElement);
+                  });
+               }
+            });
+      });
+   </script>
+</body>
+
+</html>
